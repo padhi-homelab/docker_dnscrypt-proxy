@@ -3,7 +3,9 @@
 This is an extensive list of public DNS resolvers supporting the
 DNSCrypt and DNS-over-HTTP2 protocols.
 
-This list is maintained by Saswat Padhi.
+This sublist is maintained by Saswat Padhi.
+The [original (much larger) list](https://github.com/DNSCrypt/dnscrypt-resolvers/blob/master/v3/public-resolvers.md)
+is maintained by Frank Denis <j @ dnscrypt [.] info>.
 
 To use that list, add this to the `[sources]` section of your
 `dnscrypt-proxy.toml` configuration file:

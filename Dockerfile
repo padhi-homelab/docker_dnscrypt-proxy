@@ -21,8 +21,12 @@ RUN apk add --update --no-cache \
 
 FROM alpine:latest
 
+LABEL maintainer="Saswat Padhi saswat.sourav@gmail.com"
+
 COPY --from=builder /go/src/github.com/DNSCrypt/dnscrypt-proxy/src/dnscrypt-proxy/dnscrypt-proxy \
                     /usr/local/bin/dnscrypt-proxy
+COPY --from=builder /go/src/github.com/DNSCrypt/dnscrypt-proxy/src/dnscrypt-proxy/example-dnscrypt-proxy.toml \
+                    /etc/dnscrypt-proxy.toml
 
 RUN dnscrypt-proxy --version \
  && apk add --update --no-cache \
@@ -32,8 +36,6 @@ RUN dnscrypt-proxy --version \
 
 EXPOSE 8053/tcp
 EXPOSE 8053/udp
-
-COPY dnscrypt-proxy.toml /etc/dnscrypt-proxy.toml
 
 ENTRYPOINT [ "/usr/local/bin/dnscrypt-proxy" \
            , "-config" , "/etc/dnscrypt-proxy.toml" ]

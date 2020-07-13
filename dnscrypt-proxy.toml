@@ -1,4 +1,4 @@
-listen_addresses = ['127.0.0.1:8053']
+listen_addresses = ['0.0.0.0:8053']
 max_clients = 256
 
 server_names = []

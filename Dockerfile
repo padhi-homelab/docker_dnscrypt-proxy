@@ -2,7 +2,7 @@ FROM golang:alpine as builder
 ARG TARGETARCH
 ARG TARGETOS
 
-ARG DNSCRYPT_PROXY_VERSION=2.0.44
+ARG DNSCRYPT_PROXY_VERSION=2.0.45
 
 ENV CGO_ENABLED=0 \
     GOOS=${TARGETOS} \
@@ -19,7 +19,7 @@ RUN apk add --update --no-cache \
  && go build -ldflags="-s -w" -mod vendor
 
 
-FROM alpine:latest
+FROM padhihomelab/alpine-base:3.12_0.19.0_0.2
 
 LABEL maintainer="Saswat Padhi saswat.sourav@gmail.com"
 
@@ -28,17 +28,14 @@ COPY --from=builder /go/src/github.com/DNSCrypt/dnscrypt-proxy/src/dnscrypt-prox
 COPY --from=builder /go/src/github.com/DNSCrypt/dnscrypt-proxy/src/dnscrypt-proxy/example-dnscrypt-proxy.toml \
                     /etc/dnscrypt-proxy.toml
 
-RUN dnscrypt-proxy --version \
- && apk add --update --no-cache \
+RUN apk add --update --no-cache \
         bind-tools \
-        ca-certificates \
- && rm -rf /tmp/* /var/cache/apk/*
+        ca-certificates
 
 EXPOSE 8053/tcp
 EXPOSE 8053/udp
 
-ENTRYPOINT [ "/usr/local/bin/dnscrypt-proxy" \
-           , "-config" , "/etc/dnscrypt-proxy.toml" ]
+CMD [ "/usr/local/bin/dnscrypt-proxy", "-config" , "/etc/dnscrypt-proxy.toml" ]
 
 HEALTHCHECK --interval=10s --timeout=5s --start-period=20s \
         CMD dig +short @127.0.0.1 -p 8053 google.com A || exit 1

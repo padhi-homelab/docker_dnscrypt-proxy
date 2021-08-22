@@ -2,7 +2,7 @@ FROM golang:alpine as builder
 ARG TARGETARCH
 ARG TARGETOS
 
-ARG DNSCRYPT_PROXY_VERSION=2.0.45
+ARG DNSCRYPT_PROXY_VERSION=2.1.0
 
 ENV CGO_ENABLED=0 \
     GOOS=${TARGETOS} \
@@ -19,7 +19,7 @@ RUN apk add --update --no-cache \
  && go build -ldflags="-s -w" -mod vendor
 
 
-FROM padhihomelab/alpine-base:3.13_0.19.0_0.2
+FROM padhihomelab/alpine-base:3.14.1_0.19.0_0.2
 
 LABEL maintainer="Saswat Padhi saswat.sourav@gmail.com"
 

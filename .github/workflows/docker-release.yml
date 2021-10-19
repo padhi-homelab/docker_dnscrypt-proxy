@@ -14,7 +14,7 @@ jobs:
     steps:
       -
         name: "Git: Checkout"
-        uses: actions/checkout@v2.3.5
+        uses: actions/checkout@v2.3.4
       -
         name: "Docker: Setup QEMU"
         id: qemu
@@ -72,11 +72,11 @@ jobs:
       -
         name: "Anchore Scan: Run"
         id: scan
-        uses: anchore/scan-action@v3
+        uses: anchore/scan-action@v2
         with:
           image: "${{ steps.prepare.outputs.image }}:${{ steps.prepare.outputs.version }}"
           acs-report-enable: true
-          fail-build: true
+          fail-build: false
           severity-cutoff: "critical"
       -
         name: "Anchore Scan: Report"

@@ -19,7 +19,7 @@ RUN apk add --update --no-cache \
  && go build -ldflags="-s -w" -mod vendor
 
 
-FROM padhihomelab/alpine-base:3.16.1_0.19.0_0.2
+FROM padhihomelab/alpine-base:3.16.2_0.19.0_0.2
 
 LABEL maintainer="Saswat Padhi saswat.sourav@gmail.com"
 

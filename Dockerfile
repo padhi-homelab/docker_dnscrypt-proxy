@@ -1,17 +1,16 @@
-FROM golang:1.21.3-alpine as builder
+FROM golang:1.23.4-alpine as builder
 ARG TARGETARCH
 ARG TARGETOS
 
-ARG DNSCRYPT_PROXY_VERSION=2.1.5
+ARG DNSCRYPT_PROXY_VERSION=2.1.7
 
 ENV CGO_ENABLED=0 \
     GOOS=${TARGETOS} \
     GOARCH=${TARGETARCH}
 
-RUN apk add --update --no-cache \
-        build-base \
-        gcc \
-        git \
+RUN apk add --update --no-cache build-base \
+                                gcc \
+                                git \
  && git clone https://github.com/DNSCrypt/dnscrypt-proxy.git \
               /go/src/github.com/DNSCrypt/dnscrypt-proxy/src \
  && cd /go/src/github.com/DNSCrypt/dnscrypt-proxy/src/dnscrypt-proxy \
@@ -19,7 +18,7 @@ RUN apk add --update --no-cache \
  && go build -ldflags="-s -w" -mod vendor
 
 
-FROM padhihomelab/alpine-base:3.18.4_0.19.0_0.2
+FROM padhihomelab/alpine-base:3.21.2_0.19.0_0.2
 
 LABEL maintainer="Saswat Padhi saswat.sourav@gmail.com"
 
@@ -28,9 +27,8 @@ COPY --from=builder /go/src/github.com/DNSCrypt/dnscrypt-proxy/src/dnscrypt-prox
 COPY --from=builder /go/src/github.com/DNSCrypt/dnscrypt-proxy/src/dnscrypt-proxy/example-dnscrypt-proxy.toml \
                     /etc/dnscrypt-proxy.toml
 
-RUN apk add --update --no-cache \
-        bind-tools \
-        ca-certificates
+RUN apk add --update --no-cache bind-tools \
+                                ca-certificates
 
 EXPOSE 8053/tcp
 EXPOSE 8053/udp
